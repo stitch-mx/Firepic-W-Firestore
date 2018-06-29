@@ -6,12 +6,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  
+<ion-content>
+
   <ion-list *ngFor="let platillo of platillos | async">
     <ion-item>
       <ion-thumbnail item-start>
-        <img src={{platillo.img}}>
+        <img [src]="platillo.img">
       </ion-thumbnail>
       <h2>{{platillo.nombre}}</h2>
       <p>{{platillo.tipo}}</p>
@@ -19,4 +19,6 @@
     </ion-item>
   </ion-list>
 
+  <button ion-button block (tap)="iraBebidas()">Ir a bebidas</button>
+  <button ion-button block (tap)="irAgregar()">Agregar platillo</button>
 </ion-content>

@@ -1,6 +1,7 @@
 export interface Platillo {
 
-    nombre:string
-    tipo:string
-    img:string
+    nombre: string
+    tipo: string
+    img: string
+
 }
