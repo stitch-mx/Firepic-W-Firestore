@@ -27,7 +27,24 @@
         <ion-label fixed>Imagen</ion-label>
         <ion-input [(ngModel)]="img" type="text"></ion-input>
       </ion-item>
-    
+
+      <ion-item *ngIf="imagePreview">
+        <img [src]="imagePreview">
+      </ion-item>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <button ion-button block (tap)="showCamera()">Cámara </button>
+            </ion-col>
+            <ion-col>
+              <button ion-button block (tap)="showGalery()">Galería</button>
+            </ion-col>
+          </ion-row>
+        
+        </ion-grid>
+      
+      
       <button ion-button block (tap)="agregarPlatillo()">Agregar</button>
     
     </ion-list>
