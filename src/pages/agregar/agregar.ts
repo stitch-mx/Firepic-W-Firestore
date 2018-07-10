@@ -11,8 +11,11 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';  
 import { map } from 'rxjs/operators';
-import { Platillo} from '../../commons/platillo'
+import { Platillo} from '../../commons/platillo';
+import { storage } from 'firebase';
 
+//Provider para carga de archivos
+import { CargarImagenProvider } from '../../providers/cargar-imagen/cargar-imagen';
 
 @Component({
   selector: 'page-agregar',
@@ -27,8 +30,6 @@ export class AgregarPage {
   nombre:any;
   tipo:any;
   img:any;
-
-
   imagePreview: string = "";
   imagen64: string;
   
@@ -38,7 +39,8 @@ export class AgregarPage {
      public navParams: NavParams,
      public toastCtrl: ToastController,
      private camera: Camera,
-     private imagePicker: ImagePicker) {
+     private imagePicker: ImagePicker,
+     public cargarImagen: CargarImagenProvider) {
   }
 
   agregarPlatillo() {
@@ -48,9 +50,11 @@ export class AgregarPage {
 
     const id = this.afs.createId();
     
-    if (this.nombre != null && this.tipo != null && this.img != null) {
+    if (this.nombre != null && this.tipo != null ) {
+
+     
       
-      const plato: Platillo = { 'nombre': this.nombre, 'tipo': this.tipo, 'img': this.img }
+      const plato: Platillo = { 'nombre': this.nombre, 'tipo': this.tipo } //'img': this.img 
       console.table(plato);
       this.afs.collection('platillos').doc(id).set(plato);
       this.presentToast();
@@ -78,28 +82,48 @@ export class AgregarPage {
     toast.present();
   }
 
+ 
+
   close(){
     this.viewCtrl.dismiss();
   }
 
   
-  showCamera(){
+  async showCamera(){
+    try {
 
-    const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      const options: CameraOptions = {
+        quality: 50,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      }
+
+     
+  
+      const result = await this.camera.getPicture(options);
+      //this.imagePreview = result;
+      const image = `data:image/jpeg;base64, ${result}`;
+      const pictures = storage().ref('platillos/platilloNum');
+      pictures.putString(image, 'data_url');
+      //this.img = pictures;
+      console.log("imagen subida correctamente!");
+     
+     /*.then((imageData) => {
+        // imageData is either a base64 encoded string or a file URI
+        // If it's base64 (DATA_URL):
+        this.imagePreview = 'data:image/jpeg;base64,' + imageData;
+        this.imagen64 = `data:image/jpeg;base64, ${imageData}`;
+        //this.cargarImagen.uploadFile(this.imagen64);
+       }, (err) => {
+        console.log("Error en cámara", JSON.stringify(err));
+       });*/
+       //this.cargarImagen.uploadFile(imagen);
+      
+    } catch (error) {
+      
     }
-
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      this.imagePreview = 'data:image/jpeg;base64,' + imageData;
-      this.imagen64 = imageData;
-     }, (err) => {
-      console.log("Error en cámara", JSON.stringify(err));
-     });
+    
 
   }
 
@@ -126,9 +150,7 @@ export class AgregarPage {
 
 
   }
-
-
-
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad AgregarPage');
   }

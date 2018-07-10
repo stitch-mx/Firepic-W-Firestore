@@ -20,6 +20,7 @@ import { environment } from '../environments/environment';
 
 import { Camera } from '@ionic-native/camera';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { CargarImagenProvider } from '../providers/cargar-imagen/cargar-imagen';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     SplashScreen,
     Camera,
     ImagePicker,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CargarImagenProvider
   ]
 })
 export class AppModule {}
