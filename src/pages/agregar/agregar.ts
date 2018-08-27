@@ -109,17 +109,7 @@ export class AgregarPage {
       //this.img = pictures;
       console.log("imagen subida correctamente!");
      
-     /*.then((imageData) => {
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64 (DATA_URL):
-        this.imagePreview = 'data:image/jpeg;base64,' + imageData;
-        this.imagen64 = `data:image/jpeg;base64, ${imageData}`;
-        //this.cargarImagen.uploadFile(this.imagen64);
-       }, (err) => {
-        console.log("Error en cámara", JSON.stringify(err));
-       });*/
-       //this.cargarImagen.uploadFile(imagen);
-      
+         
     } catch (error) {
       
     }
